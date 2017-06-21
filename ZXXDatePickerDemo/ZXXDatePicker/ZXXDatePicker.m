@@ -10,7 +10,6 @@
 
 //Default values
 #define kZXXDatePickerItemHeight 35
-#define kZXXDatePickerMonthArray @[@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12"]
 
 @interface ZXXDatePicker ()<UIPickerViewDataSource,UIPickerViewDelegate>
 {
@@ -28,6 +27,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        self.currentCalendar = [NSCalendar currentCalendar];
         _datePickerMode = datePickerMode;
         [self setupViews];
     }
@@ -38,6 +39,7 @@
 - (void)setupViews
 {
     [self initDataArray];
+    
     [self addSubview:self.datePicker];
 }
 
@@ -48,7 +50,7 @@
             
             break;
         case ZXXDatePickerModeMonth:
-            
+            self.dataArray = @[self.currentCalendar.veryShortMonthSymbols];
             break;
         case ZXXDatePickerModeMonthAndDay:
             
@@ -56,14 +58,20 @@
         case ZXXDatePickerModeYearAndMonth:
             
             break;
-        default:
+        case ZXXDatePickerModeWeek:
+            self.dataArray = @[self.currentCalendar.weekdaySymbols];
+            break;
+        case ZXXDatePickerModeQuarter:
+            self.dataArray = @[self.currentCalendar.quarterSymbols];
             break;
     }
+}
 
-    NSCalendar *calendar = [NSCalendar currentCalendar];
+- (void)setCurrentCalendar:(NSCalendar *)currentCalendar
+{
+    _currentCalendar = currentCalendar;
     
-    
-    self.dataArray = @[@[@"2010",@"2011",@"2012",@"2013",@"2014",@"2015",@"2016",@"2017"],calendar.shortStandaloneMonthSymbols];
+    [self initDataArray];
 }
 
 #pragma mark - UIPickerView
