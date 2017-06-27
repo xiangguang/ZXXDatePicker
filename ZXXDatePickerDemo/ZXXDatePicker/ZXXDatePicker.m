@@ -19,17 +19,33 @@
 @property (nonatomic, strong) UIPickerView *datePicker;
 @property (nonatomic, strong) NSArray *dataArray;
 
+@property (nonatomic, strong) NSCalendar *currentCalendar;
+
 @end
 
 @implementation ZXXDatePicker
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        
+    }
+    
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame datePickerMode:(ZXXDatePickerMode)datePickerMode
 {
     self = [super initWithFrame:frame];
     if (self) {
         
+        self.currentDate = [NSDate date];
         self.currentCalendar = [NSCalendar currentCalendar];
+        
         _datePickerMode = datePickerMode;
+        _minimumYear = 1900;
+
         [self setupViews];
     }
     
@@ -47,7 +63,13 @@
 {
     switch (_datePickerMode) {
         case ZXXDatePickerModeYear:
-            
+        {
+            NSMutableArray *yearArray = [NSMutableArray arrayWithCapacity:0];
+            for (NSInteger i=_minimumYear; i<=_maximumYear; i++) {
+                [yearArray addObject:[NSString stringWithFormat:@"%ld",i]];
+            }
+            self.dataArray = yearArray;
+        }
             break;
         case ZXXDatePickerModeMonth:
             self.dataArray = @[self.currentCalendar.veryShortMonthSymbols];
@@ -65,6 +87,12 @@
             self.dataArray = @[self.currentCalendar.quarterSymbols];
             break;
     }
+}
+
+- (void)updateMaximumYear
+{
+    NSDateComponents *dateComponents = [self.currentCalendar components:NSCalendarUnitYear fromDate:[NSDate date]];
+    _maximumYear = dateComponents.year;
 }
 
 - (void)setCurrentCalendar:(NSCalendar *)currentCalendar
