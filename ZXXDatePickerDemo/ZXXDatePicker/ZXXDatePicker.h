@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 @property (nonatomic, copy) NSString *month;
 @property (nonatomic, copy) NSString *day;
 @property (nonatomic, copy) NSString *week;
+@property (nonatomic, copy) NSString *quarter;
 
 @end
 
@@ -40,7 +41,8 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 
 
 @property (nonatomic, strong) NSCalendar *currentCalendar;//Default is [NSCalendar currentCalendar]
-@property (nonatomic, assign) int minimumYear;
+@property (nonatomic, assign) int minimumYear;//Default is 1900
+@property (nonatomic, assign) int maxmumYear;//
 
 - (instancetype)initWithFrame:(CGRect)frame
                datePickerMode:(ZXXDatePickerMode)datePickerMode;

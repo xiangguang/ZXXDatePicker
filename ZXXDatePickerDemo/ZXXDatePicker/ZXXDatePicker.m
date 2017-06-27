@@ -8,7 +8,7 @@
 
 #import "ZXXDatePicker.h"
 
-//Default values
+//default value
 #define kZXXDatePickerItemHeight 35
 
 @interface ZXXDatePicker ()<UIPickerViewDataSource,UIPickerViewDelegate>
