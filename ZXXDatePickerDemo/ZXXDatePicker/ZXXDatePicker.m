@@ -92,36 +92,6 @@
     }
 }
 
-- (NSMutableArray *)dayArray
-{
-    if (!_dayArray) {
-        _dayArray = [NSMutableArray arrayWithCapacity:0];
-        NSDateComponents *components = [self.currentCalendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:self.currentDate];
-        for (int i =1; i<= 12; i++) {
-            components.month = i;
-            
-            NSDate *date = [self.currentCalendar dateFromComponents:components];
-            NSRange range = [self.currentCalendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
-            NSUInteger numberOfDaysInMonth = range.length;
-            
-            [_dayArray addObject:[NSString stringWithFormat:@"%ld",numberOfDaysInMonth]];
-        }
-    }
-
-    return _dayArray;
-}
-
-- (NSMutableArray *)yearArray
-{
-    if (!_yearArray) {
-        _yearArray = [NSMutableArray arrayWithCapacity:0];
-        for (NSInteger i=_minimumYear; i<=_maximumYear; i++) {
-            [_yearArray addObject:[NSString stringWithFormat:@"%ld",i]];
-        }
-    }
-    return _yearArray;
-}
-
 - (void)updateMaximumYear
 {
     NSDateComponents *dateComponents = [self.currentCalendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:self.currentDate];
@@ -148,6 +118,8 @@
     return _datePicker;
 }
 
+#pragma mark - Array
+
 - (NSArray *)dataArray
 {
     if (!_dataArray) {
@@ -156,6 +128,35 @@
     return _dataArray;
 }
 
+- (NSMutableArray *)dayArray
+{
+    if (!_dayArray) {
+        _dayArray = [NSMutableArray arrayWithCapacity:0];
+        NSDateComponents *components = [self.currentCalendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:self.currentDate];
+        for (int i =1; i<= 12; i++) {
+            components.month = i;
+            
+            NSDate *date = [self.currentCalendar dateFromComponents:components];
+            NSRange range = [self.currentCalendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
+            NSUInteger numberOfDaysInMonth = range.length;
+            
+            [_dayArray addObject:[NSString stringWithFormat:@"%ld",numberOfDaysInMonth]];
+        }
+    }
+    
+    return _dayArray;
+}
+
+- (NSMutableArray *)yearArray
+{
+    if (!_yearArray) {
+        _yearArray = [NSMutableArray arrayWithCapacity:0];
+        for (NSInteger i=_minimumYear; i<=_maximumYear; i++) {
+            [_yearArray addObject:[NSString stringWithFormat:@"%ld",i]];
+        }
+    }
+    return _yearArray;
+}
 
 #pragma mark - UIPickerViewDataSource
 
