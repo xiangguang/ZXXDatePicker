@@ -39,11 +39,14 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 @property (nonatomic, weak) id<ZXXDatePickerDelegate> delegate;
 @property (nonatomic, strong, readonly) UIPickerView *datePicker;
 
-
 @property (nonatomic, strong) NSDate *currentDate;//Default is [NSDate date]
 @property (nonatomic, assign) NSInteger minimumYear;//Default is 1900
 @property (nonatomic, assign) NSInteger maximumYear;//Default is Now
 
 - (instancetype)initWithFrame:(CGRect)frame
                datePickerMode:(ZXXDatePickerMode)datePickerMode;
+
+//Show Picker
+- (void)showPickerInView:(UIView *)view;
+- (void)hiddenPicker;
 @end

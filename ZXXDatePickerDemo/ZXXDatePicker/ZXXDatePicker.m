@@ -8,6 +8,12 @@
 
 #import "ZXXDatePicker.h"
 
+@implementation ZXXDateModel
+
+
+
+@end
+
 //default value
 #define kZXXDatePickerItemHeight 35
 
@@ -18,6 +24,10 @@
     NSInteger _currentYear;
     NSInteger _currentMonth;
     NSInteger _currentDay;
+    NSInteger _currentWeek;
+    NSInteger _currentQuarter;
+    
+    ZXXDateModel *dateModel;
 }
 
 @property (nonatomic, strong) UIPickerView *datePicker;
@@ -104,6 +114,8 @@
     
     [self updateMaximumYear];
     [self initDataArray];
+    
+    [self.datePicker reloadAllComponents];
 }
 
 #pragma mark - UIPickerView
@@ -215,6 +227,19 @@
     if ([_delegate respondsToSelector:@selector(zxxDatePicker:valueChanged:)]) {
         [_delegate zxxDatePicker:self valueChanged:nil];
     }
+}
+
+
+#pragma mark - Show
+
+- (void)showPickerInView:(UIView *)view
+{
+    //todo
+}
+
+- (void)hiddenPicker
+{
+    //todo
 }
 
 @end
