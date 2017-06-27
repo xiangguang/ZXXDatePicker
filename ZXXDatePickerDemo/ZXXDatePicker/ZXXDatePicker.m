@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) NSCalendar *currentCalendar;
 @property (nonatomic, strong) NSMutableArray *yearArray;
-@property (nonatomic, strong) NSMutableArray *monthArray;
+@property (nonatomic, strong) NSArray *monthArray;
 @property (nonatomic, strong) NSMutableArray *dayArray;
 
 @end
@@ -75,13 +75,13 @@
             self.dataArray = @[self.yearArray];
             break;
         case ZXXDatePickerModeMonth:
-            self.dataArray = @[self.currentCalendar.veryShortMonthSymbols];
+            self.dataArray = @[self.monthArray];
             break;
         case ZXXDatePickerModeMonthAndDay:
-            self.dataArray = @[self.currentCalendar.veryShortMonthSymbols,self.dayArray];
+            self.dataArray = @[self.monthArray,self.dayArray.firstObject];
             break;
         case ZXXDatePickerModeYearAndMonth:
-            self.dataArray = @[self.yearArray,self.currentCalendar.veryShortMonthSymbols];
+            self.dataArray = @[self.yearArray,self.monthArray];
             break;
         case ZXXDatePickerModeWeek:
             self.dataArray = @[self.currentCalendar.weekdaySymbols];
@@ -140,11 +140,23 @@
             NSRange range = [self.currentCalendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
             NSUInteger numberOfDaysInMonth = range.length;
             
-            [_dayArray addObject:[NSString stringWithFormat:@"%ld",numberOfDaysInMonth]];
+            NSMutableArray *daysArray = [NSMutableArray arrayWithCapacity:0];
+            for (int dayIndex = 1; dayIndex<= numberOfDaysInMonth; dayIndex++) {
+                [daysArray addObject:[NSString stringWithFormat:@"%d",dayIndex]];
+            }
+            [_dayArray addObject:daysArray];
         }
     }
     
     return _dayArray;
+}
+
+- (NSArray *)monthArray
+{
+    if (!_monthArray) {
+        _monthArray = self.currentCalendar.veryShortMonthSymbols;
+    }
+    return _monthArray;
 }
 
 - (NSMutableArray *)yearArray
@@ -168,6 +180,7 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     NSArray *array = self.dataArray[component];
+    
     return array.count;
 }
 
@@ -191,6 +204,14 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    if (_datePickerMode == ZXXDatePickerModeMonthAndDay) {
+        if (component == 0) {
+            NSArray *array = self.dayArray[row];
+            self.dataArray = @[self.monthArray,array];
+            
+            [self.datePicker reloadComponent:1];
+        }
+    }
     if ([_delegate respondsToSelector:@selector(zxxDatePicker:valueChanged:)]) {
         [_delegate zxxDatePicker:self valueChanged:nil];
     }

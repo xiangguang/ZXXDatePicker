@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
-    ZXXDatePickerModeYearAndMonth,  //Displays year and month (e.g. 2017 | 06)
+    ZXXDatePickerModeYearAndMonth,  //Displays year and month (e.g. 2017 | 6)
     ZXXDatePickerModeMonthAndDay,   //Displays month and day (e.g. 06 | 20)
     ZXXDatePickerModeYear,          //Displays year (e.g. 2017)
     ZXXDatePickerModeMonth,         //Displays month (e.g. 6)

@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    ZXXDatePicker *datePicker = [[ZXXDatePicker alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 200) datePickerMode:ZXXDatePickerModeYear];
+    ZXXDatePicker *datePicker = [[ZXXDatePicker alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 200) datePickerMode:ZXXDatePickerModeMonthAndDay];
     [self.view addSubview:datePicker];
 }
 
