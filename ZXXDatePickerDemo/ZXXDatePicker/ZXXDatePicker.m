@@ -10,7 +10,12 @@
 
 @implementation ZXXDateModel
 
-
+- (NSString *)description
+{
+    NSString *desc = [NSString stringWithFormat:@"%ld-%ld-%ld week:%ld quarter:%ld",self.year,self.month,self.day,self.week,self.quarter];
+    
+    return desc;
+}
 
 @end
 
@@ -27,7 +32,7 @@
     NSInteger _currentWeek;
     NSInteger _currentQuarter;
     
-    ZXXDateModel *dateModel;
+    ZXXDateModel *_dateModel;
 }
 
 @property (nonatomic, strong) UIPickerView *datePicker;
@@ -57,6 +62,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+        _dateModel = [[ZXXDateModel alloc] init];
         _currentDate = [NSDate date];
         _currentCalendar = [NSCalendar currentCalendar];
         
@@ -104,8 +110,20 @@
 
 - (void)updateMaximumYear
 {
-    NSDateComponents *dateComponents = [self.currentCalendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:self.currentDate];
-    _maximumYear = dateComponents.year;
+    NSDateComponents *dateComponents = [self.currentCalendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday|NSCalendarUnitQuarter fromDate:self.currentDate];
+    _currentYear = dateComponents.year;
+    _currentMonth = dateComponents.month;
+    _currentDay = dateComponents.day;
+    _currentWeek = dateComponents.weekday;
+    _currentQuarter = dateComponents.quarter;
+    
+    _maximumYear = _currentYear;
+    
+    _dateModel.year = _currentYear;
+    _dateModel.month = _currentMonth;
+    _dateModel.day = _currentDay;
+    _dateModel.week = _currentWeek;
+    _dateModel.quarter = _currentQuarter;
 }
 
 - (void)setCurrentCalendar:(NSCalendar *)currentCalendar
@@ -216,19 +234,62 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    if (_datePickerMode == ZXXDatePickerModeMonthAndDay) {
-        if (component == 0) {
-            NSArray *array = self.dayArray[row];
-            self.dataArray = @[self.monthArray,array];
-            
-            [self.datePicker reloadComponent:1];
+    switch (_datePickerMode) {
+        case ZXXDatePickerModeYear:
+        {
+            _dateModel.year = [self.yearArray[row] integerValue];
         }
+            break;
+        case ZXXDatePickerModeMonth:
+        {
+            _dateModel.month = [self.monthArray[row] integerValue];
+        }
+            break;
+        case ZXXDatePickerModeMonthAndDay:
+        {
+            if (component == 0) {
+                NSArray *array = self.dayArray[row];
+                self.dataArray = @[self.monthArray,array];
+                
+                [self.datePicker reloadComponent:1];
+                
+                _dateModel.month = [self.monthArray[row] integerValue];
+            }else{
+                NSArray *componentDayArray = self.dayArray[component];
+                _dateModel.month = [componentDayArray[row] integerValue];
+            }
+        }
+            break;
+        case ZXXDatePickerModeYearAndMonth:
+        {
+            if (component == 0) {
+                _dateModel.year = [self.yearArray[row] integerValue];
+            }else{
+                _dateModel.month = [self.monthArray[row] integerValue];
+            }
+        }
+            break;
+        case ZXXDatePickerModeWeek:
+        {
+            _dateModel.week = row;
+        }
+            break;
+        case ZXXDatePickerModeQuarter:
+        {
+            _dateModel.quarter = row;
+        }
+            break;
     }
-    if ([_delegate respondsToSelector:@selector(zxxDatePicker:valueChanged:)]) {
-        [_delegate zxxDatePicker:self valueChanged:nil];
-    }
+
+    [self callback];
 }
 
+- (void)callback
+{
+    if ([_delegate respondsToSelector:@selector(zxxDatePicker:valueChanged:)]) {
+        [_delegate zxxDatePicker:self valueChanged:_dateModel];
+    }
+}
 
 #pragma mark - Show
 

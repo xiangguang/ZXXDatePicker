@@ -19,11 +19,11 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 
 @interface ZXXDateModel : NSObject
 
-@property (nonatomic, copy) NSString *year;
-@property (nonatomic, copy) NSString *month;
-@property (nonatomic, copy) NSString *day;
-@property (nonatomic, copy) NSString *week;
-@property (nonatomic, copy) NSString *quarter;
+@property (nonatomic, assign) NSInteger year;
+@property (nonatomic, assign) NSInteger month;
+@property (nonatomic, assign) NSInteger day;
+@property (nonatomic, assign) NSInteger week;
+@property (nonatomic, assign) NSInteger quarter;
 
 @end
 
