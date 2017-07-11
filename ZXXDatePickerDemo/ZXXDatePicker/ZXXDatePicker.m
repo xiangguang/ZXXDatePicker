@@ -33,6 +33,8 @@
     NSInteger _currentQuarter;
     
     ZXXDateModel *_dateModel;
+    
+    UIView *bgView;
 }
 
 @property (nonatomic, strong) UIPickerView *datePicker;
@@ -293,14 +295,77 @@
 
 #pragma mark - Show
 
+#define kZXXDatePickerBgViewHeight 260
+#define kZXXDatePickerToolBarHeight 40
+
 - (void)showPickerInView:(UIView *)view
 {
-    //todo
+    if (bgView) {
+        [self hiddenPicker];
+        [self showPicker];
+        return;
+    }
+    
+    CGRect frame = self.frame;
+    frame.origin.y = kZXXDatePickerToolBarHeight;
+    frame.size.height = kZXXDatePickerBgViewHeight - kZXXDatePickerToolBarHeight;
+    self.frame = frame;
+    
+    _datePicker.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
+    [_datePicker reloadAllComponents];
+    
+    CGFloat sw = CGRectGetWidth(view.frame);
+    CGFloat sh = CGRectGetHeight(view.frame);
+    
+    bgView = [[UIView alloc] initWithFrame:CGRectMake(0, sh, sw, kZXXDatePickerBgViewHeight)];
+    [bgView addSubview:self];
+    
+    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, sw, kZXXDatePickerToolBarHeight)];
+    [bgView addSubview:toolBar];
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(cancelPickerView)];
+    UIBarButtonItem *fixButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *okButton = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStyleDone target:self action:@selector(okButtonClicked)];
+    toolBar.items = @[cancelButton,fixButton,okButton];
+    [view addSubview:bgView];
+    
+    
+    [self showPicker];
+}
+
+- (void)showPicker
+{
+    self.hidden = NO;
+    
+    CGFloat sw = CGRectGetWidth(bgView.superview.frame);
+    CGFloat sh = CGRectGetHeight(bgView.superview.frame);
+    [UIView animateWithDuration:0.4 animations:^{
+        bgView.frame = CGRectMake(0, sh-kZXXDatePickerBgViewHeight, sw , kZXXDatePickerBgViewHeight);
+    }];
 }
 
 - (void)hiddenPicker
 {
-    //todo
+    CGFloat sw = CGRectGetWidth(bgView.frame);
+    CGFloat sh = CGRectGetHeight(bgView.superview.frame);
+    
+    [UIView animateWithDuration:0.4 animations:^{
+        bgView.frame = CGRectMake(0, sh, sw, kZXXDatePickerBgViewHeight);
+    } completion:^(BOOL finished) {
+        self.hidden = YES;
+    }];
 }
+
+
+- (void)cancelPickerView
+{
+    [self hiddenPicker];
+}
+
+- (void)okButtonClicked
+{
+    [self callback];
+}
+
 
 @end
