@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
-    ZXXDatePickerModeYearAndMonth,  //Displays year and month (e.g. 2017 | 06)
+    ZXXDatePickerModeYearAndMonth,  //Displays year and month (e.g. 2017 | 6)
     ZXXDatePickerModeMonthAndDay,   //Displays month and day (e.g. 06 | 20)
     ZXXDatePickerModeYear,          //Displays year (e.g. 2017)
     ZXXDatePickerModeMonth,         //Displays month (e.g. 6)
@@ -19,11 +19,11 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 
 @interface ZXXDateModel : NSObject
 
-@property (nonatomic, copy) NSString *year;
-@property (nonatomic, copy) NSString *month;
-@property (nonatomic, copy) NSString *day;
-@property (nonatomic, copy) NSString *week;
-@property (nonatomic, copy) NSString *quarter;
+@property (nonatomic, assign) NSInteger year;
+@property (nonatomic, assign) NSInteger month;
+@property (nonatomic, assign) NSInteger day;
+@property (nonatomic, assign) NSInteger week;
+@property (nonatomic, assign) NSInteger quarter;
 
 @end
 
@@ -39,11 +39,14 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 @property (nonatomic, weak) id<ZXXDatePickerDelegate> delegate;
 @property (nonatomic, strong, readonly) UIPickerView *datePicker;
 
-
-@property (nonatomic, strong) NSCalendar *currentCalendar;//Default is [NSCalendar currentCalendar]
-@property (nonatomic, assign) int minimumYear;//Default is 1900
-@property (nonatomic, assign) int maxmumYear;//
+@property (nonatomic, strong) NSDate *currentDate;//Default is [NSDate date]
+@property (nonatomic, assign) NSInteger minimumYear;//Default is 1900
+@property (nonatomic, assign) NSInteger maximumYear;//Default is Now
 
 - (instancetype)initWithFrame:(CGRect)frame
                datePickerMode:(ZXXDatePickerMode)datePickerMode;
+
+//Show Picker
+- (void)showPickerInView:(UIView *)view;
+- (void)hiddenPicker;
 @end
