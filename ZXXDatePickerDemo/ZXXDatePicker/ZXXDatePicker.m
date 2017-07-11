@@ -146,6 +146,7 @@
         _datePicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
         _datePicker.dataSource = self;
         _datePicker.delegate = self;
+        _datePicker.showsSelectionIndicator = YES;
     }
     return _datePicker;
 }
@@ -300,9 +301,7 @@
 
 - (void)showPickerInView:(UIView *)view
 {
-    if (bgView) {
-        [self hiddenPicker];
-        [self showPicker];
+    if (bgView && !bgView.hidden) {
         return;
     }
     
@@ -356,7 +355,6 @@
     }];
 }
 
-
 - (void)cancelPickerView
 {
     [self hiddenPicker];
@@ -365,6 +363,8 @@
 - (void)okButtonClicked
 {
     [self callback];
+    
+    [self hiddenPicker];
 }
 
 
