@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
     ZXXDatePickerModeYear,          //Displays year (e.g. 2017)
     ZXXDatePickerModeMonth,         //Displays month (e.g. 6)
     ZXXDatePickerModeWeek,          //Displays month (e.g. Monday)
-    ZXXDatePickerModeQuarter,       //Displays month (e.g. Monday)
+    ZXXDatePickerModeQuarter,       //Displays month (e.g. 1st quarter)
 };
 
 @interface ZXXDateModel : NSObject
@@ -30,7 +30,8 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 @class ZXXDatePicker;
 @protocol ZXXDatePickerDelegate <NSObject>
 
-- (void)zxxDatePicker:(ZXXDatePicker *)datePicker valueChanged:(ZXXDateModel *)dateModel;
+- (void)zxxDatePicker:(ZXXDatePicker *)datePicker
+         valueChanged:(ZXXDateModel *)dateModel;
 
 @end
 
@@ -46,7 +47,15 @@ typedef NS_ENUM(NSInteger, ZXXDatePickerMode) {
 - (instancetype)initWithFrame:(CGRect)frame
                datePickerMode:(ZXXDatePickerMode)datePickerMode;
 
-//Show Picker
+/**
+ Show Picker
+
+ @param view The super view
+ */
 - (void)showPickerInView:(UIView *)view;
+
+/**
+ Dismiss the picker view
+ */
 - (void)hiddenPicker;
 @end
